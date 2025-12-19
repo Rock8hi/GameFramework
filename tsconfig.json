@@ -1,0 +1,14 @@
+{
+  /* Base configuration. Do not edit this field. */
+  "extends": "./temp/tsconfig.cocos.json",
+
+  /* Add your custom configuration here. */
+  "compilerOptions": {
+    "strict": false,
+    "paths": {
+            "@config/*": ["./assets/scripts/config/*"],
+            "@framework/*": ["./assets/scripts/framework/*"],
+            "@extension/*": ["./assets/scripts/extension/*"]
+        }
+  }
+}

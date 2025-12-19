@@ -1,0 +1,7 @@
+{
+    "imports": {
+        "@config/": "./assets/scripts/config/",
+        "@framework/": "./assets/scripts/framework/",
+        "@extension/": "./assets/scripts/extension/"
+    }
+}
