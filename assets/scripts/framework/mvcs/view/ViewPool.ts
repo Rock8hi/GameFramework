@@ -1,7 +1,7 @@
 import { _decorator, Node, Prefab, instantiate, js } from 'cc';
 import { BaseComponent } from '@framework/base/BaseComponent';
 import { IRecycleHandler, ViewInfo } from './ViewDefine';
-import { Entry } from '@framework/Entry';
+import { BaseEntry } from '@framework/BaseEntry';
 
 const { ccclass } = _decorator;
 
@@ -53,7 +53,7 @@ export class ViewPool extends BaseComponent {
                 return;
             }
             const { bundle, prefab } = clazz.prototype.GetPrefabURL();
-            Entry.Res.LoadAsset(name, bundle, prefab, Prefab, (err: Error, data: Prefab) => {
+            BaseEntry.Res.LoadAsset(name, bundle, prefab, Prefab, (err: Error, data: Prefab) => {
                 if (err) {
                     reject(err);
                     return;

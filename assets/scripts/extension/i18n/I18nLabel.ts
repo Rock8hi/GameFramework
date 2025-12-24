@@ -1,7 +1,7 @@
 import { _decorator, Node, Label } from 'cc';
 import { BaseComponent } from '@framework/base/BaseComponent';
-import { Entry } from '@framework/Entry';
-import { I18nModel } from '@extension/models/I18nModel';
+import { BaseEntry } from '@framework/BaseEntry';
+import { I18nModel } from './I18nModel';
 
 const { ccclass, property, requireComponent, disallowMultiple } = _decorator;
 
@@ -23,6 +23,6 @@ export class I18nLabel extends BaseComponent {
             console.warn('多语言key是空');
             return;
         }
-        this.getComponent(Label).string = Entry.Model.Get(I18nModel).GetText(this.mItemKey);
+        this.getComponent(Label).string = BaseEntry.Model.Get(I18nModel).GetText(this.mItemKey);
     }
 }

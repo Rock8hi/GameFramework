@@ -11,7 +11,7 @@ export class CacheManager extends BaseManager {
     public Dump() {
         if (DEVELOP) {
             console.log('=======================CacheManager=======================');
-            this.mDataDict!.forEach((val, key) => console.log(key, val));
+            this.mDataDict.forEach((val, key) => console.log(key, val));
             console.log('=======================CacheManager=======================');
         }
     }
@@ -21,7 +21,7 @@ export class CacheManager extends BaseManager {
             console.warn('GetData, key类型错误:', key);
             return;
         }
-        return this.mDataDict!.get(key);
+        return this.mDataDict.get(key);
     }
 
     /**
@@ -43,19 +43,19 @@ export class CacheManager extends BaseManager {
             console.warn('DelData, key类型错误:', key);
             return;
         }
-        return this.mDataDict!.delete(key);
+        return this.mDataDict.delete(key);
     }
 
     public DelList(regex: RegExp) {
         for (const val of this.mDataDict!) {
             if (regex && regex.test(val[0])) {
-                this.mDataDict!.delete(val[0]);
+                this.mDataDict.delete(val[0]);
             }
         }
     }
 
     public Clear() {
-        this.mDataDict!.clear();
+        this.mDataDict.clear();
     }
 
     public SetData(key: string, val: unknown) {
@@ -63,11 +63,11 @@ export class CacheManager extends BaseManager {
             console.warn('SetData, key类型错误:', key);
             return;
         }
-        if (this.mDataDict!.has(key)) {
+        if (this.mDataDict.has(key)) {
             console.warn('SetData, 重复key:', key);
             return;
         }
-        this.mDataDict!.set(key, val);
+        this.mDataDict.set(key, val);
     }
 
     public SetBool(key: string, val: boolean) {

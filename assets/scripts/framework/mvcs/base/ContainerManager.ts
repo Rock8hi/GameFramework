@@ -19,17 +19,17 @@ export abstract class ContainerManager<Cell extends BaseObject> extends BaseMana
     protected OnLoad() {
         super.OnLoad();
         this.OnInit();
-        this.mCellDict!.forEach(val => val['OnInit']());
+        this.mCellDict.forEach(val => val['OnInit']());
     }
 
     protected OnUpdate(dt: number): void {
         super.OnUpdate(dt);
-        this.mCellDict!.forEach(val => val['OnStep'](dt));
+        this.mCellDict.forEach(val => val['OnStep'](dt));
     }
 
     protected OnDestroy() {
-        this.mCellDict!.forEach(val => val['OnFree']());
-        this.mCellDict!.clear();
+        this.mCellDict.forEach(val => val['OnFree']());
+        this.mCellDict.clear();
         super.OnDestroy();
     }
 
@@ -40,12 +40,12 @@ export abstract class ContainerManager<Cell extends BaseObject> extends BaseMana
      */
     public Get<T extends Cell>(clazz: string | __private.__types_globals__Constructor<T>): T | null {
         const name = typeof clazz === 'string' ? clazz : js.getClassName(clazz);
-        return this.mCellDict!.has(name) ? (this.mCellDict!.get(name) as T) : null;
+        return this.mCellDict.has(name) ? (this.mCellDict.get(name) as T) : null;
     }
 
     public Dump() {
-        console.debug(js.getClassName(this), this.mCellDict!.size);
-        this.mCellDict!.forEach((val, key) => console.debug(key, val));
+        console.debug(js.getClassName(this), this.mCellDict.size);
+        this.mCellDict.forEach((val, key) => console.debug(key, val));
     }
 
     /**
@@ -83,12 +83,12 @@ export abstract class ContainerManager<Cell extends BaseObject> extends BaseMana
             console.warn('class is not existed. class:', name);
             return;
         }
-        if (this.mCellDict!.has(name)) {
+        if (this.mCellDict.has(name)) {
             // 禁止重复实例化，一个类仅支持一个实例
             console.warn('class has already been instantiated. class:', name);
             return;
         }
-        this.mCellDict!.set(name, new clazz() as Cell);
+        this.mCellDict.set(name, new clazz() as Cell);
     }
 
     /**
@@ -101,11 +101,11 @@ export abstract class ContainerManager<Cell extends BaseObject> extends BaseMana
             console.warn('class is unregistered. class:', clazz);
             return;
         }
-        if (this.mCellDict!.has(name)) {
+        if (this.mCellDict.has(name)) {
             // 禁止重复实例化，一个类仅支持一个实例
             console.warn('class has already been instantiated. class:', name);
             return;
         }
-        this.mCellDict!.set(name, new clazz() as Cell);
+        this.mCellDict.set(name, new clazz() as Cell);
     }
 }

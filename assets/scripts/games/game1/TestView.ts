@@ -26,6 +26,7 @@ export class TestView extends BaseView {
     }
 
     private OnClick1() {
+        this.mLabel && (this.mLabel.string = '你好世界');
         Toast.Show('Hello World 你好世界')
     }
 

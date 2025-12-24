@@ -1,8 +1,8 @@
-import { _decorator } from 'cc';
+import { _decorator, JsonAsset } from 'cc';
 import { DEVELOP } from 'cc/userland/macro';
 import { BaseModel } from '@framework/mvcs/model/BaseModel';
-import { Entry } from '@framework/Entry';
-import { JsonAsset } from 'cc';
+import { LangType } from '@extension/i18n/I18nDefine';
+import { BaseEntry } from '@framework/BaseEntry';
 
 const { ccclass } = _decorator;
 
@@ -32,19 +32,23 @@ export class I18nItem {
 export class I18nModel extends BaseModel {
     private _JsonData: object = null;
     private _ItemList: Map<string, I18nItem> = new Map();
-    private _LangType: string = null;
+    private _LangType: LangType = LangType.zh_CN;
 
     private mRegCache: Map<string, RegExp> = new Map();
 
     protected OnInit(): void {
         super.OnInit();
-        const items = [] // Entry.Res.LoadAsset('i18n', 'resources', 'a/b/c', JsonAsset, (err, data) => {})
+        const items = []; // BaseEntry.Res.LoadAsset('i18n', 'resources', 'a/b/c', JsonAsset, (err, data) => {})
         for (const key in items) {
             if (this._ItemList.has(key)) {
                 continue;
             }
             this._ItemList.set(key, new I18nItem(items[key]));
         }
+    }
+
+    public SetLang(ty: LangType) {
+        this._LangType = ty;
     }
 
     public GetText(id: string, ...args: any[]) {

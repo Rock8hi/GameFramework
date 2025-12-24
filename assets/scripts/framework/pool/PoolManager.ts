@@ -26,7 +26,7 @@ export class PoolManager extends BaseManager {
     public Dump() {
         if (DEVELOP) {
             console.log('=======================PoolManager=======================');
-            this.mPoolDict!.forEach((val, key) => console.log(key, val));
+            this.mPoolDict.forEach((val, key) => console.log(key, val));
             console.log('=======================PoolManager=======================');
         }
     }

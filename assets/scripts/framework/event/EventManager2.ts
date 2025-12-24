@@ -78,7 +78,7 @@ export class EventManager extends BaseManager {
 
     /** 移除在某个对象上的监听 */
     public TargetOff(target: EventThis) {
-        // this.mEventHandler!.targetOff(target);
+        // this.mEventHandler.targetOff(target);
     }
 
     /** 触发事件 */

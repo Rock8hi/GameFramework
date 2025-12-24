@@ -175,10 +175,10 @@ export class ResourceManager extends BaseManager {
                         onComplete && onComplete(new Error('group is null'));
                         return;
                     }
-                    if (!this.mAssetCache!.has(_group)) {
-                        this.mAssetCache!.set(_group, new Map());
+                    if (!this.mAssetCache.has(_group)) {
+                        this.mAssetCache.set(_group, new Map());
                     }
-                    const map = this.mAssetCache!.get(_group);
+                    const map = this.mAssetCache.get(_group);
                     assets.forEach((val, idx) => {
                         const _path = normalize(paths[idx]);
                         const key = `${name}:${_path}:${js.getClassName(val)}`;
@@ -217,8 +217,8 @@ export class ResourceManager extends BaseManager {
         }
         const _path = normalize(path);
         const key = `${name}:${_path}:${js.getClassName(type)}`;
-        if (this.mAssetCache!.has(_group)) {
-            const map = this.mAssetCache!.get(_group);
+        if (this.mAssetCache.has(_group)) {
+            const map = this.mAssetCache.get(_group);
             if (map.has(key)) {
                 onComplete && onComplete(null, map.get(key) as T);
                 return;
@@ -236,10 +236,10 @@ export class ResourceManager extends BaseManager {
                     onComplete && onComplete(err, null);
                     return;
                 }
-                if (!this.mAssetCache!.has(_group)) {
-                    this.mAssetCache!.set(_group, new Map());
+                if (!this.mAssetCache.has(_group)) {
+                    this.mAssetCache.set(_group, new Map());
                 }
-                const map = this.mAssetCache!.get(_group);
+                const map = this.mAssetCache.get(_group);
                 if (!map.has(key)) {
                     map.set(key, asset);
                     asset.addRef();
@@ -284,11 +284,11 @@ export class ResourceManager extends BaseManager {
                     onComplete && onComplete(new Error('group is null'), null);
                     return;
                 }
-                if (!this.mAssetCache!.has(_group)) {
-                    this.mAssetCache!.set(_group, new Map());
+                if (!this.mAssetCache.has(_group)) {
+                    this.mAssetCache.set(_group, new Map());
                 }
                 const _type = js.getClassName(type);
-                const map = this.mAssetCache!.get(_group);
+                const map = this.mAssetCache.get(_group);
                 assets.forEach((val, idx) => {
                     const _path = normalize(paths[idx]);
                     const key = `${name}:${_path}:${_type}`;
@@ -315,19 +315,19 @@ export class ResourceManager extends BaseManager {
             console.warn('group is null');
             return;
         }
-        if (!this.mAssetCache!.has(_group)) {
+        if (!this.mAssetCache.has(_group)) {
             return;
         }
         const _path = normalize(path);
         const key = `${name}:${_path}:${js.getClassName(type)}`;
-        const map = this.mAssetCache!.get(_group);
+        const map = this.mAssetCache.get(_group);
         if (!map.has(key)) {
             return;
         }
         const asset = map.get(key);
         map.delete(key);
         if (map.size === 0) {
-            this.mAssetCache!.delete(_group);
+            this.mAssetCache.delete(_group);
         }
         if (!asset.isValid) {
             console.warn(`该资源被异常释放, name: ${name}; path: ${_path}; type: ${js.getClassName(type)};`);
@@ -355,10 +355,10 @@ export class ResourceManager extends BaseManager {
             console.warn('group is null');
             return;
         }
-        if (!this.mAssetCache!.has(_group)) {
+        if (!this.mAssetCache.has(_group)) {
             return;
         }
-        const map = this.mAssetCache!.get(_group);
+        const map = this.mAssetCache.get(_group);
         map.forEach((val, key) => {
             const arr = key.split(':');
             const _name = arr[0];
@@ -376,7 +376,7 @@ export class ResourceManager extends BaseManager {
             }
         });
         map.clear();
-        this.mAssetCache!.delete(_group);
+        this.mAssetCache.delete(_group);
     }
 
     /** 释放此包中的所有资源，并移除此包 */
@@ -396,7 +396,7 @@ export class ResourceManager extends BaseManager {
     /** 释放此包中的所有资源 */
     public ReleaseBundle(name: string): void {
         const groupsToDelete: string[] = [];
-        this.mAssetCache!.forEach((map, group) => {
+        this.mAssetCache.forEach((map, group) => {
             const keysToDelete: string[] = [];
             map.forEach((asset, key) => {
                 const arr = key.split(':');
@@ -410,7 +410,7 @@ export class ResourceManager extends BaseManager {
                 groupsToDelete.push(group);
             }
         });
-        groupsToDelete.forEach(key => this.mAssetCache!.delete(key));
+        groupsToDelete.forEach(key => this.mAssetCache.delete(key));
 
         const bundle = assetManager.getBundle(name);
         if (bundle) {
@@ -434,7 +434,7 @@ export class ResourceManager extends BaseManager {
 
     public Dump() {
         console.debug('================1================');
-        this.mAssetCache!.forEach((val, key) => {
+        this.mAssetCache.forEach((val, key) => {
             console.debug(`group: ${key}`);
             val.forEach((v, k) => console.debug(k, v));
         });

@@ -18,12 +18,12 @@ export class EventManager extends BaseManager {
 
     /** 一次性注册监听事件 */
     public Once(name: EventName, listener: EventListener, target?: EventObject): void {
-        this.mEventHandler!.once(name, listener, target);
+        this.mEventHandler.once(name, listener, target);
     }
 
     /** 注册监听事件 */
     public On(name: EventName, listener: EventListener, target?: EventObject): void {
-        this.mEventHandler!.on(name, listener, target);
+        this.mEventHandler.on(name, listener, target);
     }
 
     /** 取消所有name的事件监听 */
@@ -35,16 +35,16 @@ export class EventManager extends BaseManager {
 
     /** 取消事件监听 */
     public Off(name: EventName, listener?: EventListener, target?: EventObject): void {
-        this.mEventHandler!.off(name, listener, target);
+        this.mEventHandler.off(name, listener, target);
     }
 
     /** 移除在某个对象上的监听 */
     public TargetOff(target: EventObject) {
-        this.mEventHandler!.targetOff(target);
+        this.mEventHandler.targetOff(target);
     }
 
     /** 触发事件 */
     public Emit(name: EventName, arg0?: any, arg1?: any, arg2?: any, arg3?: any): void {
-        this.mEventHandler!.emit(name, arg0, arg1, arg2, arg3);
+        this.mEventHandler.emit(name, arg0, arg1, arg2, arg3);
     }
 }

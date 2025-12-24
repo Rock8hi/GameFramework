@@ -9,31 +9,31 @@ const { ccclass, property } = _decorator;
 @ccclass('ViewManager')
 export class ViewManager extends BaseManager {
     @property({ type: Camera, displayName: '2D相机' })
-    private mCamera2D: Camera = null!;
+    private mCamera2D: Camera = null;
 
     @property({ type: Node, displayName: '根渲染节点' })
-    private mRootNode: Node = null!;
+    private mRootNode: Node = null;
 
     @property({ type: Node, displayName: '全屏场景层' })
-    private mSceneNode: Node = null!;
+    private mSceneNode: Node = null;
 
     @property({ type: Node, displayName: '全屏界面层' })
-    private mLayerNode: Node = null!;
+    private mLayerNode: Node = null;
 
     @property({ type: Node, displayName: '弹框层' })
-    private mPopUpNode: Node = null!;
+    private mPopUpNode: Node = null;
 
     @property({ type: Node, displayName: '菜单层' })
-    private mMenuNode: Node = null!;
+    private mMenuNode: Node = null;
 
     @property({ type: Node, displayName: '对话框层' })
-    private mDialogNode: Node = null!;
+    private mDialogNode: Node = null;
 
     @property({ type: Node, displayName: 'Toast层' })
-    private mToastNode: Node = null!;
+    private mToastNode: Node = null;
 
     @property({ type: Node, displayName: '引导层' })
-    private mGuideNode: Node = null!;
+    private mGuideNode: Node = null;
 
     /** 2D渲染相机 */
     public get Camera2D() {
@@ -51,7 +51,7 @@ export class ViewManager extends BaseManager {
     }
 
     /** 节点池，被回收的预制体对象放在这里 */
-    private mViewPool: ViewPool = null!;
+    private mViewPool: ViewPool = null;
     /** 已经实例化的预制体的状态数据列表 */
     private mViewInfoList: Array<ViewInfo> = new Array();
 
@@ -172,7 +172,7 @@ export class ViewManager extends BaseManager {
             !!comp.OnHide && comp.OnHide();
             await comp.OnFadeHide();
             info.stat = ViewStat.destroyed;
-            this.mViewInfoList.splice(idx, 1);
+            this.mViewInfoList.splice(this.mViewInfoList.indexOf(info), 1);
             this.mViewPool.Put(info);
             resolve();
         });
