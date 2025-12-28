@@ -23,12 +23,6 @@ export class ViewManager extends BaseManager {
     @property({ type: Node, displayName: '弹框层' })
     private mPopUpNode: Node = null;
 
-    @property({ type: Node, displayName: '菜单层' })
-    private mMenuNode: Node = null;
-
-    @property({ type: Node, displayName: '对话框层' })
-    private mDialogNode: Node = null;
-
     @property({ type: Node, displayName: 'Toast层' })
     private mToastNode: Node = null;
 
@@ -123,15 +117,18 @@ export class ViewManager extends BaseManager {
                 reject('获取预制体实例失败');
                 return;
             }
-            const comp = node.getComponent(BaseView) as any;
+            const comp = node.getComponent(BaseView);
             if (!comp) {
                 reject('获取BaseView派生类组件失败');
                 return;
             }
+            // @ts-ignore
             node.parent = this.GetParent(comp.GetDrawLevel());
             info.node = node;
+            // @ts-ignore
             !!comp.OnShow && comp.OnShow(...args);
             info.stat = ViewStat.fadein;
+            // @ts-ignore
             await comp.OnFadeShow();
             info.stat = ViewStat.show;
             resolve();
@@ -155,7 +152,7 @@ export class ViewManager extends BaseManager {
                 resolve();
                 return;
             }
-            const comp = info.node.getComponent(BaseView) as any;
+            const comp = info.node.getComponent(BaseView);
             if (!comp) {
                 info.stat = ViewStat.destroyed;
                 this.isValid && info.node.destroy();
@@ -163,13 +160,16 @@ export class ViewManager extends BaseManager {
                 reject('获取BaseView派生类组件失败');
                 return;
             }
+            // @ts-ignore
             if (comp.IsRepeatableView() && !(view instanceof Node)) {
                 console.warn(`支持多实例的界面(${comp.name}), 仅支持传入Node的方式关闭`);
                 resolve();
                 return;
             }
             info.stat = ViewStat.fadeout;
+            // @ts-ignore
             !!comp.OnHide && comp.OnHide();
+            // @ts-ignore
             await comp.OnFadeHide();
             info.stat = ViewStat.destroyed;
             this.mViewInfoList.splice(this.mViewInfoList.indexOf(info), 1);

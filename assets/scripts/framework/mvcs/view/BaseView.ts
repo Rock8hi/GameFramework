@@ -1,7 +1,7 @@
 import { _decorator, Color, Node, Sprite, SpriteFrame, tween, Tween, Vec3, js } from 'cc';
 import { BaseComponent } from '@framework/base/BaseComponent';
 import { ViewType } from './ViewDefine';
-import { BaseEntry } from '@framework/BaseEntry';
+import { Entry } from '@framework/Entry';
 import { EventName } from '@config/EventDefine';
 
 const { ccclass, property } = _decorator;
@@ -49,17 +49,17 @@ export abstract class BaseView extends BaseComponent {
      * @param args 打开界面时传递的参数
      */
     protected OnShow(...args: any): void {
-        BaseEntry.Event.Emit(EventName.VIEW_OPENED, js.getClassName(this));
+        Entry.Event.Emit(EventName.VIEW_OPENED, js.getClassName(this));
     }
 
     /** 关闭界面时触发此方法 */
     protected OnHide() {
-        BaseEntry.Event.Emit(EventName.VIEW_CLOSED, js.getClassName(this));
+        Entry.Event.Emit(EventName.VIEW_CLOSED, js.getClassName(this));
     }
 
     /** 关闭界面，常用于关闭按钮 */
     protected OnClose() {
-        BaseEntry.View.Hide(this.node);
+        Entry.View.Hide(this.node);
     }
 
     /** 入场动画 */

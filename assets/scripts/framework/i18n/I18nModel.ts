@@ -1,8 +1,8 @@
 import { _decorator, JsonAsset } from 'cc';
 import { DEVELOP } from 'cc/userland/macro';
 import { BaseModel } from '@framework/mvcs/model/BaseModel';
-import { LangType } from '@extension/i18n/I18nDefine';
-import { BaseEntry } from '@framework/BaseEntry';
+import { LangType } from '@framework/i18n/I18nDefine';
+import { Entry } from '@framework/Entry';
 
 const { ccclass } = _decorator;
 
@@ -38,7 +38,7 @@ export class I18nModel extends BaseModel {
 
     protected OnInit(): void {
         super.OnInit();
-        const items = []; // BaseEntry.Res.LoadAsset('i18n', 'resources', 'a/b/c', JsonAsset, (err, data) => {})
+        const items = []; // Entry.Res.LoadAsset('i18n', 'resources', 'a/b/c', JsonAsset, (err, data) => {})
         for (const key in items) {
             if (this._ItemList.has(key)) {
                 continue;

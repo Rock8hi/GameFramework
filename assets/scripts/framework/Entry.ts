@@ -9,8 +9,9 @@ import { StorageManager } from './storage/StorageManager';
 import { WebManager } from './web/WebManager';
 import { ServiceManager } from './mvcs/service/ServiceManager';
 import { PoolManager } from './pool/PoolManager';
+import { I18nManager } from './i18n/I18nManager';
 
-export class BaseEntry {
+export class Entry {
     public static Model: ModelManager = null;
 
     public static View: ViewManager = null;
@@ -22,7 +23,7 @@ export class BaseEntry {
     public static Pool: PoolManager = null;
 
     /** 本地存储 */
-    public static Storage: StorageManager = null;
+    public static Store: StorageManager = null;
 
     /** 资源管理 */
     public static Res: ResourceManager = null;
@@ -38,4 +39,7 @@ export class BaseEntry {
 
     /** http交互 */
     public static Web: WebManager = null;
+
+    /** 多语言 */
+    public static I18n: I18nManager = null;
 }

@@ -1,9 +1,9 @@
 import { _decorator, Node, Label, UITransform, Size, UIOpacity, tween, view, Vec3 } from 'cc';
 import { BaseView } from '@framework/mvcs/view/BaseView';
-import { BaseEntry } from '@framework/BaseEntry';
+import { Entry } from '@framework/Entry';
 import { ViewType } from '@framework/mvcs/view/ViewDefine';
 import { BundleName } from '@config/Config';
-import { I18nModel } from '@extension/i18n/I18nModel';
+import { I18nModel } from '@framework/i18n/I18nModel';
 
 const { ccclass, property } = _decorator;
 
@@ -74,18 +74,18 @@ export class Toast extends BaseView {
         this.scheduleOnce(() => {
             tween(opa)
                 .to(0.3, { opacity: 0 })
-                .call(() => BaseEntry.View.Hide(this.node))
+                .call(() => Entry.View.Hide(this.node))
                 .start();
         }, 3);
     }
 
     public static Show(text: string) {
         // 若当前没有其他toast在展示，则此值指向顶部
-        !BaseEntry.View.Has(Toast) && (Toast.mHeight = 100);
+        !Entry.View.Has(Toast) && (Toast.mHeight = 100);
         if (text.startsWith('#')) {
-            BaseEntry.View.Show(Toast, BaseEntry.Model.Get(I18nModel).GetText(text.substring(1)));
+            Entry.View.Show(Toast, Entry.Model.Get(I18nModel).GetText(text.substring(1)));
         } else {
-            BaseEntry.View.Show(Toast, text);
+            Entry.View.Show(Toast, text);
         }
     }
 }

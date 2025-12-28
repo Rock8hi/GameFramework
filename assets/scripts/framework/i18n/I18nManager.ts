@@ -1,8 +1,8 @@
 import { _decorator, Enum } from 'cc';
 import { BaseManager } from '@framework/base/BaseManager';
 import { LangType } from './I18nDefine';
-import { BaseEntry } from '@framework/BaseEntry';
-import { I18nModel } from '@extension/i18n/I18nModel';
+import { Entry } from '@framework/Entry';
+import { I18nModel } from '@framework/i18n/I18nModel';
 
 const { ccclass, property } = _decorator;
 
@@ -20,8 +20,8 @@ export class I18nManager extends BaseManager {
 
     protected OnLoad() {
         super.OnLoad();
-        this.mLangType = BaseEntry.Storage.GetNumber('language', this.mLangType);
-        BaseEntry.Model.Get(I18nModel).SetLang(this.mLangType);
+        this.mLangType = Entry.Store.GetNumber('language', this.mLangType);
+        Entry.Model.Get(I18nModel).SetLang(this.mLangType);
     }
 
     public ChangeLanguage(ty: LangType) {
@@ -29,12 +29,12 @@ export class I18nManager extends BaseManager {
             return;
         }
         this.mLangType = ty;
-        BaseEntry.Model.Get(I18nModel).SetLang(this.mLangType);
-        BaseEntry.Storage.SetNumber('language', this.mLangType);
+        Entry.Model.Get(I18nModel).SetLang(this.mLangType);
+        Entry.Store.SetNumber('language', this.mLangType);
         // TODO
-        // const labels = BaseEntry.View.RootNode.getComponentsInChildren(I18nLabel);
+        // const labels = Entry.View.RootNode.getComponentsInChildren(I18nLabel);
         // labels.forEach(val => val.UpdateView());
-        // const sprites = BaseEntry.View.RootNode.getComponentsInChildren(I18nSprite);
+        // const sprites = Entry.View.RootNode.getComponentsInChildren(I18nSprite);
         // sprites.forEach(val => val.UpdateView());
         // TODO
         // game.restart();

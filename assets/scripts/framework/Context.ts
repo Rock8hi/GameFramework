@@ -11,12 +11,13 @@ import { ResourceManager } from './resource/ResourceManager';
 import { StorageManager } from './storage/StorageManager';
 import { WebManager } from './web/WebManager';
 import { PoolManager } from './pool/PoolManager';
-import { BaseEntry } from './BaseEntry';
+import { Entry } from './Entry';
+import { I18nManager } from './i18n/I18nManager';
 
 const { ccclass, property } = _decorator;
 
 @ccclass
-export class BaseContext extends BaseComponent {
+export class Context extends BaseComponent {
     @property(ModelManager)
     private mModelMgr: ModelManager = null;
 
@@ -33,7 +34,7 @@ export class BaseContext extends BaseComponent {
     private mPoolMgr: PoolManager = null;
 
     @property(StorageManager)
-    private mStorageMgr: StorageManager = null;
+    private mStoreMgr: StorageManager = null;
 
     @property(ResourceManager)
     private mResMgr: ResourceManager = null;
@@ -50,18 +51,22 @@ export class BaseContext extends BaseComponent {
     @property(WebManager)
     private mWebMgr: WebManager = null;
 
+    @property(I18nManager)
+    private mI18nMgr: I18nManager = null;
+
     protected OnLoad(): void {
         super.OnLoad();
-        BaseEntry.Model = this.mModelMgr;
-        BaseEntry.View = this.mViewMgr;
-        BaseEntry.Ctrl = this.mCtrlMgr;
-        BaseEntry.Serv = this.mServMgr;
-        BaseEntry.Pool = this.mPoolMgr;
-        BaseEntry.Storage = this.mStorageMgr;
-        BaseEntry.Res = this.mResMgr;
-        BaseEntry.Event = this.mEventMgr;
-        BaseEntry.Audio = this.mAudioMgr;
-        BaseEntry.Cache = this.mCacheMgr;
-        BaseEntry.Web = this.mWebMgr;
+        Entry.Model = this.mModelMgr;
+        Entry.View = this.mViewMgr;
+        Entry.Ctrl = this.mCtrlMgr;
+        Entry.Serv = this.mServMgr;
+        Entry.Pool = this.mPoolMgr;
+        Entry.Store = this.mStoreMgr;
+        Entry.Res = this.mResMgr;
+        Entry.Event = this.mEventMgr;
+        Entry.Audio = this.mAudioMgr;
+        Entry.Cache = this.mCacheMgr;
+        Entry.Web = this.mWebMgr;
+        Entry.I18n = this.mI18nMgr;
     }
 }

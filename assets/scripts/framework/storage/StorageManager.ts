@@ -3,6 +3,8 @@ import { BaseManager } from '@framework/base/BaseManager';
 
 const { ccclass } = _decorator;
 
+const localStorage: Storage = sys.localStorage;
+
 /**
  * 存储管理
  */
@@ -82,11 +84,11 @@ export class StorageManager extends BaseManager {
         if (!key) {
             return;
         }
-        this.mStorage.removeItem(this.GetFullKey(key));
+        localStorage.removeItem(this.GetFullKey(key));
     }
 
     public Clear(): void {
-        const storage = this.mStorage;
+        const storage = localStorage;
         const keys: string[] = [];
         for (let i = 0; i < storage.length; i++) {
             const key = storage.key(i);
@@ -102,16 +104,12 @@ export class StorageManager extends BaseManager {
     }
 
     public ClearAll(): void {
-        this.mStorage.clear();
+        localStorage.clear();
     }
 
     // #region ================ private region ================
 
     private mUser: string = 'default';
-
-    private get mStorage(): Storage {
-        return sys.localStorage;
-    }
 
     private GetFullKey(key: string) {
         return `${this.mUser!}:${key}`;
@@ -121,13 +119,13 @@ export class StorageManager extends BaseManager {
         if (!key) {
             return;
         }
-        this.mStorage.setItem(this.GetFullKey(key), val);
+        localStorage.setItem(this.GetFullKey(key), val);
     }
 
     private GetData(key: string): string | null {
         if (!key) {
             return null;
         }
-        return this.mStorage.getItem(this.GetFullKey(key));
+        return localStorage.getItem(this.GetFullKey(key));
     }
 }

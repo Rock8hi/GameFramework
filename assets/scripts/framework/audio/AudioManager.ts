@@ -1,6 +1,6 @@
 import { _decorator, Node, AudioSource, AudioClip, sys, math, game, Game } from 'cc';
 import { BaseManager } from '@framework/base/BaseManager';
-import { BaseEntry } from '@framework/BaseEntry';
+import { Entry } from '@framework/Entry';
 
 const { ccclass, property } = _decorator;
 
@@ -82,7 +82,7 @@ export class AudioManager extends BaseManager {
         }
         list.forEach(path => {
             const urls = path.split(':');
-            BaseEntry.Res.LoadAsset(
+            Entry.Res.LoadAsset(
                 this.node.name,
                 urls.length == 2 ? urls[0] : 'resources',
                 urls.length == 2 ? urls[1] : urls[0],
@@ -102,7 +102,7 @@ export class AudioManager extends BaseManager {
             console.warn(`path error, path: ${path}`);
             return;
         }
-        BaseEntry.Res.LoadAsset(
+        Entry.Res.LoadAsset(
             this.node.name,
             urls.length == 2 ? urls[0] : 'resources',
             urls.length == 2 ? urls[1] : urls[0],
@@ -156,7 +156,7 @@ export class AudioManager extends BaseManager {
             console.warn(`path error, path: ${path}`);
             return;
         }
-        BaseEntry.Res.LoadAsset(
+        Entry.Res.LoadAsset(
             this.node.name,
             urls.length == 2 ? urls[0] : 'resources',
             urls.length == 2 ? urls[1] : urls[0],

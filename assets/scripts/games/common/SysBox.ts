@@ -1,6 +1,6 @@
 import { _decorator, Node, Label, UITransform } from 'cc';
 import { BaseView } from '@framework/mvcs/view/BaseView';
-import { BaseEntry } from '@framework/BaseEntry';
+import { Entry } from '@framework/Entry';
 import { ViewType } from '@framework/mvcs/view/ViewDefine';
 import { BundleName } from '@config/Config';
 
@@ -127,6 +127,6 @@ export class SysBox extends BaseView {
     }
 
     public static Show(text: string | Params) {
-        BaseEntry.View.Show(SysBox, text);
+        Entry.View.Show(SysBox, text);
     }
 }
