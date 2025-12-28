@@ -1,7 +1,7 @@
 import { _decorator, __private, js } from 'cc';
 import { BaseManager } from '@framework/base/BaseManager';
 import { BaseObject } from '../base/BaseObject';
-import { Utils } from '../../utils/Utils';
+import { ClassUtils } from '../../utils/ClassUtils';
 
 const { ccclass, property } = _decorator;
 
@@ -67,7 +67,7 @@ export abstract class ContainerManager<Cell extends BaseObject> extends BaseMana
      * @param superclass 被派生的父类
      */
     protected AutoInitContainer(superclass: any) {
-        Utils.GetDerivedClasses(superclass)
+        ClassUtils.GetDerivedClasses(superclass)
             .sort((a, b) => a.prototype.Priority - b.prototype.Priority)
             .forEach(clazz => this.InitCellByClass(clazz));
     }

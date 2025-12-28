@@ -1,6 +1,6 @@
 import { js } from 'cc';
 
-export class Utils {
+export class ClassUtils {
     /**
      * 检测两个类是不是派生关系
      */
@@ -23,9 +23,7 @@ export class Utils {
                 key.startsWith('cc.') ||
                 key.startsWith('sp.') ||
                 key.startsWith('dragonBones.') ||
-                key.startsWith('internal.') ||
-                key == 'BuiltinPipelineSettings' ||
-                key == 'CCPropertyOverrideInfo'
+                key.startsWith('internal.')
             ) {
                 continue;
             }
