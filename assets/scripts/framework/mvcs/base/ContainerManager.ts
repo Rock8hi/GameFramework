@@ -10,7 +10,6 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('ContainerManager')
 export abstract class ContainerManager<Cell extends BaseObject> extends BaseManager {
-    // @property({ type: [BaseObject], displayName: 'Model列表' })
     /** 存放model、controller、service实例的字典型容器 */
     protected mCellDict: Map<string, Cell> = new Map();
 

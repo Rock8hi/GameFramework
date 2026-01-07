@@ -4,15 +4,16 @@ import { AudioManager } from './audio/AudioManager';
 import { CacheManager } from './cache/CacheManager';
 import { EventManager } from './event/EventManager';
 import { ControllerManager } from './mvcs/controller/ControllerManager';
-import { ModelManager } from './mvcs/model/ModelManager';
 import { ServiceManager } from './mvcs/service/ServiceManager';
+import { ModelManager } from './mvcs/model/ModelManager';
 import { ViewManager } from './mvcs/view/ViewManager';
 import { ResourceManager } from './resource/ResourceManager';
 import { StorageManager } from './storage/StorageManager';
 import { WebManager } from './web/WebManager';
+import { SocketManager } from './socket/SocketManager';
 import { PoolManager } from './pool/PoolManager';
-import { Entry } from './Entry';
 import { I18nManager } from './i18n/I18nManager';
+import { Entry } from './Entry';
 
 const { ccclass, property } = _decorator;
 
@@ -51,6 +52,9 @@ export class Context extends BaseComponent {
     @property(WebManager)
     private mWebMgr: WebManager = null;
 
+    @property(SocketManager)
+    private mSockMgr: SocketManager = null;
+
     @property(I18nManager)
     private mI18nMgr: I18nManager = null;
 
@@ -67,6 +71,7 @@ export class Context extends BaseComponent {
         Entry.Audio = this.mAudioMgr;
         Entry.Cache = this.mCacheMgr;
         Entry.Web = this.mWebMgr;
+        Entry.Sock = this.mSockMgr;
         Entry.I18n = this.mI18nMgr;
     }
 }

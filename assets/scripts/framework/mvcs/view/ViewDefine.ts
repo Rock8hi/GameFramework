@@ -2,9 +2,9 @@ import { Node } from 'cc';
 
 export enum ViewStat {
     /** 正在加载资源 */
-    load = 1,
+    loading = 1,
     /** 正在显示中 */
-    show,
+    showing,
     /** 进场动画 */
     fadein,
     /** 出场动画 */

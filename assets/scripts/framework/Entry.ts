@@ -2,12 +2,13 @@ import { AudioManager } from './audio/AudioManager';
 import { CacheManager } from './cache/CacheManager';
 import { EventManager } from './event/EventManager';
 import { ControllerManager } from './mvcs/controller/ControllerManager';
+import { ServiceManager } from './mvcs/service/ServiceManager';
 import { ModelManager } from './mvcs/model/ModelManager';
 import { ViewManager } from './mvcs/view/ViewManager';
 import { ResourceManager } from './resource/ResourceManager';
 import { StorageManager } from './storage/StorageManager';
 import { WebManager } from './web/WebManager';
-import { ServiceManager } from './mvcs/service/ServiceManager';
+import { SocketManager } from './socket/SocketManager';
 import { PoolManager } from './pool/PoolManager';
 import { I18nManager } from './i18n/I18nManager';
 
@@ -39,6 +40,9 @@ export class Entry {
 
     /** http交互 */
     public static Web: WebManager = null;
+
+    /** websocket交互 */
+    public static Sock: SocketManager = null;
 
     /** 多语言 */
     public static I18n: I18nManager = null;

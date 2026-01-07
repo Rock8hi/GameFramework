@@ -1,22 +1,19 @@
 import { _decorator } from 'cc';
 import { BaseManager } from '@framework/base/BaseManager';
+import { WebCallback, WebOptions, WebState } from './WebDefine';
 
 const { ccclass, property } = _decorator;
-
-type WebCallback = (stat: string | null, data: any) => void;
-
-interface WebOptions {
-    params?: Record<string, string>;
-    headers?: Record<string, string>;
-    timeout?: number;
-    body?: string | ArrayBuffer | Blob;
-}
 
 /**
  * http管理
  */
 @ccclass('WebManager')
 export class WebManager extends BaseManager {
+    private mUrlMap: Map<string, XMLHttpRequest> = new Map();
+
+    @property({ displayName: '超时时间(秒)', min: 1, step: 1, max: 60 })
+    private mDefaultTimeout: number = 10;
+
     /**
      * GET请求
      * @param url 请求地址
@@ -39,22 +36,22 @@ export class WebManager extends BaseManager {
     public Get(url: string, options?: WebOptions | WebCallback, callback?: WebCallback): void {
         if (!url) {
             console.warn('请求地址是空');
-            callback && callback('ERROR_EMPTY_URL', null);
+            callback && callback(WebState.ERR_EMPTY_URL);
             return;
         }
         if (!url.startsWith('http://') && url.startsWith('https://')) {
             console.warn('请求地址格式错误');
-            callback && callback('ERROR_URL', null);
+            callback && callback(WebState.ERR_URL_FORMAT);
             return;
         }
         if (url.indexOf('?') > -1) {
             console.warn('请使用第二形参options中的params传递参数');
-            callback && callback('ERROR_PARAMS', null);
+            callback && callback(WebState.ERR_INVALID_PARAMS);
             return;
         }
         if (this.mUrlMap.has(url)) {
             console.warn(`地址[${url}]正在请求中，禁止重复请求`);
-            callback && callback('ERROR_REPEAT_REQUEST', null);
+            callback && callback(WebState.ERR_REPEAT_REQUEST);
             return;
         }
         if (typeof options == 'function') {
@@ -97,34 +94,38 @@ export class WebManager extends BaseManager {
         }
         xhr.ontimeout = () => {
             this.mUrlMap.delete(url);
-            callback && callback('ERROR_TIMEOUT', null);
+            callback && callback(WebState.ERR_TIMEOUT);
         };
         // 处理异常
         xhr.onloadend = () => {
             if (xhr.status == 500) {
                 this.mUrlMap.delete(url);
-                callback && callback('ERROR_NO_NETWORK', null);
+                callback && callback(WebState.ERR_NOT_NETWORK);
             }
         };
         // 处理异常
         xhr.onerror = () => {
             this.mUrlMap.delete(url);
-            if (xhr.readyState == 0 || xhr.readyState == 1 || xhr.status == 0) {
-                callback && callback('ERROR_NO_NETWORK', null);
+            if (
+                xhr.readyState === XMLHttpRequest.UNSENT ||
+                xhr.readyState === XMLHttpRequest.OPENED ||
+                xhr.status === 0
+            ) {
+                callback && callback(WebState.ERR_NOT_NETWORK);
             } else {
-                callback && callback('ERROR_UNKNOWN', null);
+                callback && callback(WebState.ERR_UNKNOWN);
             }
         };
         // 收到回复
         xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) {
+            if (xhr.readyState !== XMLHttpRequest.DONE) {
                 return;
             }
             this.mUrlMap.delete(url);
             if (xhr.status >= 200 && xhr.status < 400) {
                 callback && callback(null, xhr.response);
             } else {
-                callback && callback('ERROR_UNKNOWN', null);
+                callback && callback(WebState.ERR_UNKNOWN);
             }
         };
         // 发送请求
@@ -132,7 +133,7 @@ export class WebManager extends BaseManager {
     }
 
     /** 使用POST请求文本或键值对 */
-    public PostText(url: string, options: WebOptions, callback: WebCallback) {
+    public PostForm(url: string, options: WebOptions, callback: WebCallback) {
         options = options || {};
         if (options.params) {
             let params = '';
@@ -157,7 +158,7 @@ export class WebManager extends BaseManager {
         options = options || {};
         if (options.body instanceof ArrayBuffer || options.body instanceof Blob) {
             console.log(`地址[${url}]的body不是JSON数据`);
-            callback && callback('ERROR_BODY', null);
+            callback && callback(WebState.ERR_PAYLOAD, null);
             return;
         }
         if (typeof options.body !== 'string') {
@@ -165,7 +166,7 @@ export class WebManager extends BaseManager {
                 options.body = JSON.stringify(options.body);
             } catch (e) {
                 console.log(`地址[${url}]的body不是JSON数据`);
-                callback && callback('ERROR_BODY', null);
+                callback && callback(WebState.ERR_PAYLOAD, null);
                 return;
             }
         }
@@ -179,7 +180,7 @@ export class WebManager extends BaseManager {
         options = options || {};
         if (!(options.body instanceof ArrayBuffer)) {
             console.log(`地址[${url}]的body不是二进制数据`);
-            callback && callback('ERROR_BODY', null);
+            callback && callback(WebState.ERR_PAYLOAD, null);
             return;
         }
         options.headers = options.headers || {};
@@ -209,22 +210,22 @@ export class WebManager extends BaseManager {
     public Post(url: string, options?: WebOptions | WebCallback, callback?: WebCallback): void {
         if (!url) {
             console.warn('请求地址是空');
-            callback && callback('ERROR_EMPTY_URL', null);
+            callback && callback(WebState.ERR_EMPTY_URL);
             return;
         }
         if (!url.startsWith('http://') && url.startsWith('https://')) {
             console.warn('请求地址格式错误');
-            callback && callback('ERROR_URL', null);
+            callback && callback(WebState.ERR_URL_FORMAT);
             return;
         }
         if (url.indexOf('?') > -1) {
             console.warn('请使用第二形参body传递参数');
-            callback && callback('ERROR_PARAMS', null);
+            callback && callback(WebState.ERR_INVALID_PARAMS);
             return;
         }
         if (this.mUrlMap.has(url)) {
             console.warn(`地址[${url}]正在请求中，禁止重复请求`);
-            callback && callback('ERROR_REPEAT_REQUEST', null);
+            callback && callback(WebState.ERR_REPEAT_REQUEST, null);
             return;
         }
         if (typeof options == 'function') {
@@ -263,34 +264,38 @@ export class WebManager extends BaseManager {
         }
         xhr.ontimeout = () => {
             this.mUrlMap.delete(url);
-            callback && callback('ERROR_TIMEOUT', null);
+            callback && callback(WebState.ERR_TIMEOUT);
         };
         // 处理异常
         xhr.onloadend = () => {
             if (xhr.status == 500) {
                 this.mUrlMap.delete(url);
-                callback && callback('ERROR_NO_NETWORK', null);
+                callback && callback(WebState.ERR_NOT_NETWORK);
             }
         };
         // 处理异常
         xhr.onerror = () => {
             this.mUrlMap.delete(url);
-            if (xhr.readyState == 0 || xhr.readyState == 1 || xhr.status == 0) {
-                callback && callback('ERROR_NO_NETWORK', null);
+            if (
+                xhr.readyState === XMLHttpRequest.UNSENT ||
+                xhr.readyState === XMLHttpRequest.OPENED ||
+                xhr.status === 0
+            ) {
+                callback && callback(WebState.ERR_NOT_NETWORK);
             } else {
-                callback && callback('ERROR_UNKNOWN', null);
+                callback && callback(WebState.ERR_UNKNOWN);
             }
         };
         // 收到回复
         xhr.onreadystatechange = () => {
-            if (xhr.readyState !== 4) {
+            if (xhr.readyState !== XMLHttpRequest.DONE) {
                 return;
             }
             this.mUrlMap.delete(url);
             if (xhr.status >= 200 && xhr.status < 400) {
-                callback && callback(null, xhr.response);
+                callback && callback(WebState.SUCCESS, xhr.response);
             } else {
-                callback && callback('ERROR_UNKNOWN', null);
+                callback && callback(WebState.ERR_UNKNOWN);
             }
         };
         // 发送请求
@@ -308,18 +313,5 @@ export class WebManager extends BaseManager {
         }
         this.mUrlMap.get(url)?.abort();
         this.mUrlMap.delete(url);
-    }
-
-    private mUrlMap: Map<string, XMLHttpRequest> = new Map();
-
-    @property({ displayName: '超时时间(秒)', min: 1, step: 1, max: 60 })
-    private mDefaultTimeout: number = 10;
-
-    protected OnLoad() {
-        super.OnLoad();
-    }
-
-    protected OnDestroy() {
-        super.OnDestroy();
     }
 }

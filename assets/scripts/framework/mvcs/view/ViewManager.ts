@@ -109,12 +109,23 @@ export class ViewManager extends BaseManager {
                 return;
             }
 
-            const info = { name: name, node: null, stat: ViewStat.load };
+            const info = { name: name, node: null, stat: ViewStat.loading };
             this.mViewInfoList.push(info);
 
             const node = await this.mViewPool.Get(clazz);
             if (!node) {
                 reject('获取预制体实例失败');
+                return;
+            }
+            if (this.mViewInfoList.indexOf(info) === -1) {
+                // 加载预制体期间，调用了Hide接口，加载完成后走销毁流程
+                info.node = node;
+                // @ts-ignore
+                info.node.getComponent(BaseView).OnHide();
+                info.stat = ViewStat.destroyed;
+                // val.node && val.node.destroy();
+                this.mViewPool.Put(info);
+                resolve();
                 return;
             }
             const comp = node.getComponent(BaseView);
@@ -123,14 +134,19 @@ export class ViewManager extends BaseManager {
                 return;
             }
             // @ts-ignore
-            node.parent = this.GetParent(comp.GetDrawLevel());
+            const level = comp.GetDrawLevel();
+            if (level === ViewType.scene) {
+                this.Clear();
+                this.mViewInfoList.push(info);
+            }
+            node.parent = this.GetParent(level);
             info.node = node;
             // @ts-ignore
-            !!comp.OnShow && comp.OnShow(...args);
+            comp.OnShow(...args);
             info.stat = ViewStat.fadein;
             // @ts-ignore
             await comp.OnFadeShow();
-            info.stat = ViewStat.show;
+            info.stat = ViewStat.showing;
             resolve();
         });
     }
@@ -152,10 +168,17 @@ export class ViewManager extends BaseManager {
                 resolve();
                 return;
             }
-            const comp = info.node.getComponent(BaseView);
+            if (info.stat === ViewStat.loading) {
+                // 加载中界面被销毁
+                info.stat = ViewStat.destroyed;
+                this.mViewInfoList.splice(idx, 1);
+                resolve();
+                return;
+            }
+            const comp = info.node?.getComponent(BaseView);
             if (!comp) {
                 info.stat = ViewStat.destroyed;
-                this.isValid && info.node.destroy();
+                info.node.isValid && info.node.destroy();
                 this.mViewInfoList.splice(idx, 1);
                 reject('获取BaseView派生类组件失败');
                 return;
@@ -168,7 +191,7 @@ export class ViewManager extends BaseManager {
             }
             info.stat = ViewStat.fadeout;
             // @ts-ignore
-            !!comp.OnHide && comp.OnHide();
+            comp.OnHide();
             // @ts-ignore
             await comp.OnFadeHide();
             info.stat = ViewStat.destroyed;
@@ -200,6 +223,11 @@ export class ViewManager extends BaseManager {
 
     public Clear() {
         this.mViewInfoList.forEach(val => {
+            if (!val.node) {
+                return;
+            }
+            // @ts-ignore
+            val.node.getComponent(BaseView).OnHide();
             val.stat = ViewStat.destroyed;
             // val.node && val.node.destroy();
             this.mViewPool.Put(val);
